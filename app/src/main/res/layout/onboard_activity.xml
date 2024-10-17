@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_image"
+    android:orientation="vertical"
+    tools:ignore="ExtraText">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/onboard_background_gradient">
+
+        <ImageView
+            android:id="@+id/welcome_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-20dp"
+            app:srcCompat="@drawable/main_logo" />
+
+        <TextView
+            android:id="@+id/welcome_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="120dp"
+            android:fontFamily="@font/newsreader_bold"
+            android:text="@string/onboard_welcome_text"
+            android:textColor="@color/logo_font_color"
+            android:textSize="26sp" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/welcome_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="400dp"
+        android:background="@drawable/onboard_button_corner_radius"
+        android:fontFamily="@font/newsreader_bold"
+        android:text="@string/onboard_button_text"
+        android:padding="15dp"
+        android:textColor="@color/black" />
+
+
+</LinearLayout>
