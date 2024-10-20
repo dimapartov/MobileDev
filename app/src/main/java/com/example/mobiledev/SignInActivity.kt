@@ -14,8 +14,8 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var passwordInput: EditText
 
     // Фиктивные данные для входа
-    private val DUMMY_EMAIL = "test@example.com"
-    private val DUMMY_PASSWORD = "password123"
+    private val DUMMY_EMAIL = "1"
+    private val DUMMY_PASSWORD = "1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
