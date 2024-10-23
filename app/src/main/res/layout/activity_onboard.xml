@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@drawable/onboard_button_corner_radius"
+        android:background="@drawable/onboard_button_template"
         android:padding="13dp"
         android:text="@string/onboard_button_text"
         android:textColor="@color/black"
