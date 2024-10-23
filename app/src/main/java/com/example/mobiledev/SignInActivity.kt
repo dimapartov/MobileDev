@@ -21,9 +21,10 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
 
-        emailInput = findViewById(R.id.email_input)
-        passwordInput = findViewById(R.id.password_input)
+        emailInput = findViewById(R.id.signin_email_input)
+        passwordInput = findViewById(R.id.signin_password_input)
         val signInButton: Button = findViewById(R.id.sign_in_button)
+        val goToSignIpButton: Button = findViewById(R.id.go_to_sign_up_button)
 
         signInButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
@@ -38,6 +39,11 @@ class SignInActivity : AppCompatActivity() {
                     Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        goToSignIpButton.setOnClickListener {
+            val intent = Intent(this@SignInActivity, SignUpActivity::class.java)
+            startActivity(intent)
         }
     }
 
