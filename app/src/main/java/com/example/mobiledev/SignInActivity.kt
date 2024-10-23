@@ -80,6 +80,7 @@ package com.example.mobiledev
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -89,6 +90,8 @@ class SignInActivity : AppCompatActivity() {
 
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
+
+    private val TAG = "SignInActivity"
 
     // Фиктивные данные для входа
     private val DUMMY_EMAIL = "1"
@@ -132,6 +135,42 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)  // Запускаем SignUpActivity
             finish()  // Закрываем SignInActivity
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart called")
+        // Активность становится видимой для пользователя
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume called")
+        // Активность начинает взаимодействовать с пользователем
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause called")
+        // Активность больше не на переднем плане (пользователь переключился на другую активность)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop called")
+        // Активность больше не видна пользователю
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.d(TAG, "onRestart called")
+        // Активность перезапускается после остановки
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy called")
+        // Активность уничтожается, освобождаются ресурсы
     }
 
     // Метод для проверки валидности введенных данных
