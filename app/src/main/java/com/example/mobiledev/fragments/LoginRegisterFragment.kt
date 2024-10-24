@@ -20,7 +20,6 @@ class LoginRegisterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login_register, container, false)
     }
 
@@ -33,6 +32,7 @@ class LoginRegisterFragment : Fragment() {
         goToSignInButton.setOnClickListener {
             (activity as MainActivity).navigateToLogin()
         }
+
         goToSignUpButton.setOnClickListener {
             (activity as MainActivity).navigateToRegister()
         }

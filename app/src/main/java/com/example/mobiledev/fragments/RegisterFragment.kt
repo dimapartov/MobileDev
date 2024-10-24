@@ -35,7 +35,6 @@ class RegisterFragment : Fragment() {
             val enteredEmail = emailInput.text.toString()
             val enteredPassword = passwordInput.text.toString()
 
-            // Передача данных через аргументы
             val args = Bundle()
             args.putString("email", enteredEmail)
             args.putString("password", enteredPassword)
@@ -43,7 +42,6 @@ class RegisterFragment : Fragment() {
             val loginFragment = LoginFragment()
             loginFragment.arguments = args
 
-            // Переход на LoginFragment
             (activity as MainActivity).navigateToLogin(loginFragment)
         }
     }

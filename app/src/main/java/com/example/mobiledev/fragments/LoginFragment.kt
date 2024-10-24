@@ -34,7 +34,6 @@ class LoginFragment : Fragment() {
         val emailInput: EditText = view.findViewById(R.id.login_email_input)
         val passwordInput: EditText = view.findViewById(R.id.login_password_input)
 
-        // Получение данных из аргументов
         arguments?.let {
             val email = it.getString("email")
             val password = it.getString("password")
@@ -47,12 +46,9 @@ class LoginFragment : Fragment() {
             val enteredEmail = emailInput.text.toString()
             val enteredPassword = passwordInput.text.toString()
 
-            // Проверка введенных данных
             if (enteredEmail == DUMMY_EMAIL && enteredPassword == DUMMY_PASSWORD) {
-                // Успешный вход, переход на HomeFragment
                 (activity as MainActivity).navigateToHome()
             } else {
-                // Обработка ошибки (например, показать сообщение)
                 Toast.makeText(context, "Неверный email или пароль", Toast.LENGTH_SHORT).show()
             }
         }

@@ -17,12 +17,11 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Инфлейтим макет фрагмента
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         chatListView = view.findViewById(R.id.home_chat_list)
 
-        // Фиктивные данные чатов
+        // Чат
         val chatData = listOf(
             "John Doe: Hey! How's it going?",
             "Jane Smith: Don't forget the meeting tomorrow.",
@@ -30,7 +29,6 @@ class HomeFragment : Fragment() {
             "Bob Johnson: I'll be there in 10 minutes."
         )
 
-        // Адаптер для отображения списка
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, chatData)
         chatListView.adapter = adapter
 
