@@ -14,7 +14,6 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
 
-    // Фиктивные данные для входа
     private val DUMMY_EMAIL = "1"
     private val DUMMY_PASSWORD = "1"
 
@@ -27,11 +26,9 @@ class SignInActivity : AppCompatActivity() {
         val signInButton: Button = findViewById(R.id.sign_in_button)
         val goToSignUpButton: Button = findViewById(R.id.go_to_sign_up_button)
 
-        // Проверяем, были ли переданы данные через Intent от SignUpActivity
         val email = intent.getStringExtra("email")
         val password = intent.getStringExtra("password")
 
-        // Автозаполнение полей если данные были переданы
         if (!email.isNullOrEmpty()) {
             emailInput.setText(email)
         }
@@ -44,7 +41,6 @@ class SignInActivity : AppCompatActivity() {
             val passwordText = passwordInput.text.toString().trim()
 
             if (validateInput(emailText, passwordText)) {
-                // Проверка фиктивных данных
                 if (emailText == DUMMY_EMAIL && passwordText == DUMMY_PASSWORD) {
                     val intent = Intent(this@SignInActivity, HomeActivity::class.java)
                     startActivity(intent)
@@ -57,11 +53,10 @@ class SignInActivity : AppCompatActivity() {
         goToSignUpButton.setOnClickListener {
             val intent = Intent(this@SignInActivity, SignUpActivity::class.java)
             startActivity(intent)  // Запускаем SignUpActivity
-            finish()  // Закрываем SignInActivity, чтобы вернуться после завершения SignUpActivity
+            finish()  // Закрываем SignInActivity
         }
     }
 
-    // Метод для проверки валидности введенных данных
     private fun validateInput(email: String, password: String): Boolean {
         if (TextUtils.isEmpty(email)) {
             emailInput.error = "Email is required"
@@ -93,7 +88,6 @@ class SignInActivity : AppCompatActivity() {
 
     private val TAG = "SignInActivity"
 
-    // Фиктивные данные для входа
     private val DUMMY_EMAIL = "1"
     private val DUMMY_PASSWORD = "1"
 
@@ -101,15 +95,15 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
 
+        Log.d(TAG, "onCreate called")
+
         emailInput = findViewById(R.id.signin_email_input)
         passwordInput = findViewById(R.id.signin_password_input)
         val signInButton: Button = findViewById(R.id.sign_in_button)
         val goToSignUpButton: Button = findViewById(R.id.go_to_sign_up_button)
 
-        // Проверяем, был ли передан объект User через Intent
         val user = intent.getSerializableExtra("user") as? User
 
-        // Автозаполнение полей, если объект User был передан
         user?.let {
             emailInput.setText(it.email)
             passwordInput.setText(it.password)
@@ -120,7 +114,6 @@ class SignInActivity : AppCompatActivity() {
             val passwordText = passwordInput.text.toString().trim()
 
             if (validateInput(emailText, passwordText)) {
-                // Проверка фиктивных данных
                 if (emailText == DUMMY_EMAIL && passwordText == DUMMY_PASSWORD) {
                     val intent = Intent(this@SignInActivity, HomeActivity::class.java)
                     startActivity(intent)
@@ -140,40 +133,33 @@ class SignInActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart called")
-        // Активность становится видимой для пользователя
     }
 
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume called")
-        // Активность начинает взаимодействовать с пользователем
     }
 
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause called")
-        // Активность больше не на переднем плане (пользователь переключился на другую активность)
     }
 
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop called")
-        // Активность больше не видна пользователю
     }
 
     override fun onRestart() {
         super.onRestart()
         Log.d(TAG, "onRestart called")
-        // Активность перезапускается после остановки
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy called")
-        // Активность уничтожается, освобождаются ресурсы
     }
 
-    // Метод для проверки валидности введенных данных
     private fun validateInput(email: String, password: String): Boolean {
         if (TextUtils.isEmpty(email)) {
             emailInput.error = "Email is required"
