@@ -13,7 +13,6 @@ class OnboardActivity : AppCompatActivity() {
 
         val welcomeButton: Button = findViewById(R.id.onboard_welcome_button)
 
-        // Переход к экрану входа
         welcomeButton.setOnClickListener {
             val intent = Intent(this@OnboardActivity, SignInActivity::class.java)
             startActivity(intent)

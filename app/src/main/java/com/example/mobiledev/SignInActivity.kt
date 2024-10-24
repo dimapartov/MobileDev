@@ -13,7 +13,6 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
 
-    // Фиктивные данные для входа
     private val DUMMY_EMAIL = "1"
     private val DUMMY_PASSWORD = "1"
 
@@ -30,7 +29,6 @@ class SignInActivity : AppCompatActivity() {
             val password = passwordInput.text.toString().trim()
 
             if (validateInput(email, password)) {
-                // Проверка фиктивных данных
                 if (email == DUMMY_EMAIL && password == DUMMY_PASSWORD) {
                     val intent = Intent(this@SignInActivity, HomeActivity::class.java)
                     startActivity(intent)
@@ -41,7 +39,6 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    // Валидация полей
     private fun validateInput(email: String, password: String): Boolean {
         if (TextUtils.isEmpty(email)) {
             emailInput.error = "Email is required"

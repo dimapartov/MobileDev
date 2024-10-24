@@ -15,7 +15,6 @@ class HomeActivity : AppCompatActivity() {
 
         chatListView = findViewById(R.id.chat_list_view)
 
-        // Фиктивные данные чатов
         val chatData = listOf(
             "John Doe: Hey! How's it going?",
             "Jane Smith: Don't forget the meeting tomorrow.",
@@ -23,7 +22,6 @@ class HomeActivity : AppCompatActivity() {
             "Bob Johnson: I'll be there in 10 minutes."
         )
 
-        // Адаптер для отображения списка
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, chatData)
         chatListView.adapter = adapter
     }
