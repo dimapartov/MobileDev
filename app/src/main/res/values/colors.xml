@@ -10,5 +10,5 @@
 
 
     <color name="logo_font_color">#f4dc38</color>
-    <color name="signin_input_template_color">#ADFFEB3B</color>
+    <color name="input_template_color">#ADFFEB3B</color>
 </resources>
