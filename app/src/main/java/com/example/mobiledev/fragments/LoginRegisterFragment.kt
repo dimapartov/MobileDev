@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.mobiledev.R
-import com.example.mobiledev.activities.MainActivity
 
 class LoginRegisterFragment : Fragment() {
 
@@ -29,12 +29,13 @@ class LoginRegisterFragment : Fragment() {
         val goToSignInButton: Button = view.findViewById(R.id.go_to_sign_in_button)
         val goToSignUpButton: Button = view.findViewById(R.id.go_to_sign_up_button)
 
+
         goToSignInButton.setOnClickListener {
-            (activity as MainActivity).navigateToLogin()
+            findNavController().navigate(R.id.action_loginRegisterFragment_to_loginFragment)
         }
 
         goToSignUpButton.setOnClickListener {
-            (activity as MainActivity).navigateToRegister()
+            findNavController().navigate(R.id.action_loginRegisterFragment_to_registerFragment)
         }
     }
 

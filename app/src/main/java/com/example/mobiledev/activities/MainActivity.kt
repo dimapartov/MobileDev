@@ -2,71 +2,23 @@ package com.example.mobiledev.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mobiledev.HomeFragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.mobiledev.R
-import com.example.mobiledev.fragments.LoginFragment
-import com.example.mobiledev.fragments.LoginRegisterFragment
-import com.example.mobiledev.fragments.OnboardFragment
-import com.example.mobiledev.fragments.RegisterFragment
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (savedInstanceState == null) {
-            navigateToOnboard()
-        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_activity_fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
     }
 
-    fun navigateToOnboard() {
-        val fragment = OnboardFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_activity_fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
-    fun navigateToLoginRegister() {
-        val fragment = LoginRegisterFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_activity_fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-
-    fun navigateToLogin() {
-        val fragment = LoginFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_activity_fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-    fun navigateToLogin(fragment: LoginFragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_activity_fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-
-    fun navigateToRegister() {
-        val fragment = RegisterFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_activity_fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-    fun navigateToHome() {
-        val fragment = HomeFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_activity_fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
 }

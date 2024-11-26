@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.mobiledev.R
-import com.example.mobiledev.activities.MainActivity
+import com.example.mobiledev.data.User
 
 class RegisterFragment : Fragment() {
 
@@ -27,23 +29,22 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val emailInput: EditText = view.findViewById(R.id.register_email_input)
-        val passwordInput: EditText = view.findViewById(R.id.register_password_input)
         val registerButton: Button = view.findViewById(R.id.register_register_button)
 
         registerButton.setOnClickListener {
-            val enteredEmail = emailInput.text.toString()
-            val enteredPassword = passwordInput.text.toString()
+            val emailInput: EditText = view.findViewById(R.id.register_email_input)
+            val passwordInput: EditText = view.findViewById(R.id.register_password_input)
 
-            val args = Bundle()
-            args.putString("email", enteredEmail)
-            args.putString("password", enteredPassword)
+            val enteredEmail = emailInput.text.toString().trim()
+            val enteredPassword = passwordInput.text.toString().trim()
 
-            val loginFragment = LoginFragment()
-            loginFragment.arguments = args
-
-            (activity as MainActivity).navigateToLogin(loginFragment)
+            if (enteredEmail.isNotEmpty() && enteredPassword.isNotEmpty()) {
+                val user = User(enteredEmail, enteredPassword)
+                val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(user)
+                findNavController().navigate(action)
+            } else {
+                Toast.makeText(context, "Введите почту и пароль", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
-

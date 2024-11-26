@@ -12,6 +12,10 @@ class HomeFragment : Fragment() {
 
     private lateinit var chatListView: ListView
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -21,7 +25,6 @@ class HomeFragment : Fragment() {
 
         chatListView = view.findViewById(R.id.home_chat_list)
 
-        // Чат
         val chatData = listOf(
             "John Doe: Hey! How's it going?",
             "Jane Smith: Don't forget the meeting tomorrow.",
@@ -35,6 +38,8 @@ class HomeFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //
+    }
 
 }
