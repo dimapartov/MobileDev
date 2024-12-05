@@ -11,7 +11,7 @@ import com.example.mobiledev.databinding.FragmentHomeBinding
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding ?: throw RuntimeException()
+    private val binding get() = _binding!!
 
 
     override fun onCreateView(

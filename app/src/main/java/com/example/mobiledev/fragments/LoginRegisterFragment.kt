@@ -12,7 +12,7 @@ import com.example.mobiledev.databinding.FragmentLoginRegisterBinding
 class LoginRegisterFragment : Fragment() {
 
     private var _binding: FragmentLoginRegisterBinding? = null
-    private val binding get() = _binding ?: throw RuntimeException()
+    private val binding get() = _binding!!
 
 
     override fun onCreateView(

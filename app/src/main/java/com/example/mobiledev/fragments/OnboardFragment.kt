@@ -12,7 +12,7 @@ import com.example.mobiledev.databinding.FragmentOnboardBinding
 class OnboardFragment : Fragment() {
 
     private var _binding: FragmentOnboardBinding? = null
-    private val binding get() = _binding ?: throw RuntimeException()
+    private val binding get() = _binding!!
 
 
     override fun onCreateView(
