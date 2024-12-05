@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
         val passwordInput: EditText = view.findViewById(R.id.login_password_input)
 
         val user: User? = args.user
-        // Если аргумент передан, заполняем поля
+
         user?.let {
             emailInput.setText(it.email)
             passwordInput.setText(it.password)
