@@ -4,39 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.mobiledev.R
 import com.example.mobiledev.data.User
+import com.example.mobiledev.databinding.FragmentRegisterBinding
 
 class RegisterFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding ?: throw RuntimeException()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_register, container, false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val registerButton: Button = view.findViewById(R.id.register_register_button)
-
-        registerButton.setOnClickListener {
-            val emailInput: EditText = view.findViewById(R.id.register_email_input)
-            val passwordInput: EditText = view.findViewById(R.id.register_password_input)
-
-            val enteredEmail = emailInput.text.toString().trim()
-            val enteredPassword = passwordInput.text.toString().trim()
+        binding.registerRegisterButton.setOnClickListener {
+            val enteredEmail = binding.registerEmailInput.text.toString().trim()
+            val enteredPassword = binding.registerPasswordInput.text.toString().trim()
 
             if (enteredEmail.isNotEmpty() && enteredPassword.isNotEmpty()) {
                 val user = User(enteredEmail, enteredPassword)
@@ -47,4 +41,10 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }
