@@ -19,7 +19,7 @@ class LoginFragment : Fragment() {
     private val args: LoginFragmentArgs by navArgs()
 
     private var _binding: FragmentLoginBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw RuntimeException()
 
 
     override fun onCreateView(
