@@ -48,7 +48,7 @@ class LoginFragment : Fragment() {
             if (enteredEmail.isNotEmpty() && enteredPassword.isNotEmpty()) {
 
                 if (enteredEmail == DUMMY_EMAIL && enteredPassword == DUMMY_PASSWORD) {
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                    findNavController().navigate(R.id.action_loginFragment_to_charactersFragment)
                 } else {
                     Toast.makeText(context, "Неверный email или пароль", Toast.LENGTH_SHORT).show()
                 }
