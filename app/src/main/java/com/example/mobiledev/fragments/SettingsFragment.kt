@@ -1,12 +1,12 @@
 package com.example.mobiledev.fragments
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -16,28 +16,37 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.io.File
 
-
-private val Context.dataStore by preferencesDataStore(name = "settings")
+private val Context.dataStore by preferencesDataStore(name = "user_settings")
 
 class SettingsFragment : Fragment() {
+
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var sharedPreferences: SharedPreferences
+
+    // DataStore Keys
     private val USERNAME_KEY = stringPreferencesKey("username")
-    private val THEME_KEY = booleanPreferencesKey("theme")
-    private val LANGUAGE_KEY = booleanPreferencesKey("language")
+
+    // SharedPreferences Keys
+    private val THEME_KEY = "theme"
+    private val LANGUAGE_KEY = "language"
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+
+        // Initialize SharedPreferences
+        sharedPreferences =
+            requireActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+
+        loadSettings()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loadSettings()
 
         binding.saveButton.setOnClickListener {
             saveSettings()
@@ -53,22 +62,33 @@ class SettingsFragment : Fragment() {
     }
 
     private fun loadSettings() {
+        // Load username from DataStore
         val username = readFromDataStore(USERNAME_KEY) ?: ""
         binding.usernameEditText.setText(username)
 
-        binding.themeSwitch.isChecked = readFromDataStore(THEME_KEY) ?: false
-        binding.languageSwitch.isChecked = readFromDataStore(LANGUAGE_KEY) ?: false
+        // Load theme and language from SharedPreferences
+        val isThemeEnabled = sharedPreferences.getBoolean(THEME_KEY, false)
+        val isLanguageEnabled = sharedPreferences.getBoolean(LANGUAGE_KEY, false)
+
+        binding.themeSwitch.isChecked = isThemeEnabled
+        binding.languageSwitch.isChecked = isLanguageEnabled
     }
 
     private fun saveSettings() {
+        // Save username to DataStore
         val username = binding.usernameEditText.text.toString()
         saveToDataStore(USERNAME_KEY, username)
 
+        // Save theme and language to SharedPreferences
         val themeEnabled = binding.themeSwitch.isChecked
         val languageEnabled = binding.languageSwitch.isChecked
 
-        saveToDataStore(THEME_KEY, themeEnabled)
-        saveToDataStore(LANGUAGE_KEY, languageEnabled)
+        with(sharedPreferences.edit()) {
+            putBoolean(THEME_KEY, themeEnabled)
+            putBoolean(LANGUAGE_KEY, languageEnabled)
+            apply()
+        }
+
         Toast.makeText(requireContext(), "Settings saved", Toast.LENGTH_SHORT).show()
     }
 
@@ -102,8 +122,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun <T> saveToDataStore(
-        key: androidx.datastore.preferences.core.Preferences.Key<T>,
-        value: T
+        key: androidx.datastore.preferences.core.Preferences.Key<T>, value: T
     ) {
         runBlocking {
             requireContext().dataStore.edit { preferences ->
