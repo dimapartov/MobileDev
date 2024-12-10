@@ -51,7 +51,15 @@
     <fragment
         android:id="@+id/charactersFragment"
         android:name="com.example.mobiledev.fragments.CharactersFragment"
-        android:label="Characters" />
+        android:label="Characters">
+        <action
+            android:id="@+id/action_charactersFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.mobiledev.fragments.SettingsFragment"
+        android:label="Settings" />
 
 </navigation>
