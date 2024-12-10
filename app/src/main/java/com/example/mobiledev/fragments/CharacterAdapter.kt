@@ -41,3 +41,4 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
         }
     }
 }
+
