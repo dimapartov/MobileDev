@@ -21,7 +21,7 @@ private val Context.dataStore by preferencesDataStore(name = "user_settings")
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw RuntimeException()
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -96,9 +96,9 @@ class SettingsFragment : Fragment() {
         val file = File(requireContext().getExternalFilesDir(null), "dmitriikubarev.txt")
         if (file.exists()) {
             file.delete()
-            Toast.makeText(requireContext(), "File deleted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "File deleted", Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(requireContext(), "File not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "File not found", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -108,9 +108,9 @@ class SettingsFragment : Fragment() {
 
         if (backupFile.exists()) {
             backupFile.copyTo(publicFile, overwrite = true)
-            Toast.makeText(requireContext(), "File restored", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "File restored", Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(requireContext(), "No backup found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "No backup found", Toast.LENGTH_LONG).show()
         }
     }
 
