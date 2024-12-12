@@ -41,7 +41,7 @@ class CharactersFragment : Fragment() {
         val dao = AppDatabase.getInstance(requireContext()).characterDao()
         val apiService = ApiServiceProvider.createApiService()
 
-        repository = CharacterRepository(apiService, dao)
+        repository = CharacterRepository(apiService, dao, requireContext()) // Добавили context
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
@@ -52,7 +52,7 @@ class CharactersFragment : Fragment() {
 
         binding.settingsButton.setOnClickListener {
             findNavController().navigate(R.id.action_charactersFragment_to_settingsFragment)
-            clearDb()
+//            clearDb()
         }
 
         binding.previousButton.setOnClickListener {
@@ -85,7 +85,7 @@ class CharactersFragment : Fragment() {
                 loadCharactersFromDb(page)
                 Toast.makeText(
                     requireContext(),
-                    "Данные обновлены из API для страницы $page",
+                    "Данные обновлены из API и сохранены в файл для страницы $page",
                     Toast.LENGTH_SHORT
                 ).show()
             } catch (e: Exception) {
@@ -114,7 +114,7 @@ class CharactersFragment : Fragment() {
                     loadCharactersFromDb(page)
                     Toast.makeText(
                         requireContext(),
-                        "Загрузка из API для страницы $page",
+                        "Загрузка из API и сохранение в файл для страницы $page",
                         Toast.LENGTH_SHORT
                     ).show()
                 } catch (e: Exception) {

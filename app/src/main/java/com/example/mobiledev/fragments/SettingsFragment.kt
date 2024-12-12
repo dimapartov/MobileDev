@@ -93,7 +93,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun deleteFile() {
-        val file = File(requireContext().getExternalFilesDir(null), "dmitriikubarev.txt")
+        val file = File(requireContext().getExternalFilesDir(null), "characters.txt")
         if (file.exists()) {
             file.delete()
             Toast.makeText(requireContext(), "File deleted", Toast.LENGTH_LONG).show()
@@ -103,16 +103,21 @@ class SettingsFragment : Fragment() {
     }
 
     private fun restoreFile() {
-        val backupFile = File(requireContext().filesDir, "dmitriikubarev_backup.txt")
-        val publicFile = File(requireContext().getExternalFilesDir(null), "dmitriikubarev.txt")
+        val backupFile = File(requireContext().filesDir, "characters_backup.txt")
+        val targetFile = File(requireContext().getExternalFilesDir(null), "characters.txt")
 
         if (backupFile.exists()) {
-            backupFile.copyTo(publicFile, overwrite = true)
-            Toast.makeText(requireContext(), "File restored", Toast.LENGTH_LONG).show()
+            backupFile.copyTo(targetFile, overwrite = true)
+            Toast.makeText(
+                requireContext(),
+                "FIle restored from backup",
+                Toast.LENGTH_LONG
+            ).show()
         } else {
-            Toast.makeText(requireContext(), "No backup found", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Backup file not found", Toast.LENGTH_LONG).show()
         }
     }
+
 
     private fun <T> readFromDataStore(key: androidx.datastore.preferences.core.Preferences.Key<T>): T? {
         return runBlocking {

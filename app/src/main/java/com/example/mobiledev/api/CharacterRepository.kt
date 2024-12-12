@@ -1,17 +1,21 @@
 package com.example.mobiledev.api
 
+import android.content.Context
+import android.util.Log
 import com.example.mobiledev.data.CharacterDao
 import com.example.mobiledev.data.CharacterEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import android.util.Log
+import java.io.File
 
 class CharacterRepository(
     private val apiService: ApiService,
-    private val characterDao: CharacterDao
+    private val characterDao: CharacterDao,
+    private val context: Context // Add context to handle file operations
 ) {
     private val TAG = "CharacterRepository"
+    private val fileName = "characters.txt"
 
     fun getCharactersFromDb(page: Int): Flow<List<CharacterEntity>> {
         return characterDao.getCharactersByPage(page)
@@ -23,7 +27,10 @@ class CharacterRepository(
                 val response = apiService.getCharacters(page)
                 if (response.isSuccessful) {
                     response.body()?.let { body ->
-                        Log.d(TAG, "Received ${body.results.size} characters from API for page $page")
+                        Log.d(
+                            TAG,
+                            "Received ${body.results.size} characters from API for page $page"
+                        )
                         val entities = body.results.map { character ->
                             CharacterEntity(
                                 page = page,
@@ -35,6 +42,7 @@ class CharacterRepository(
                             )
                         }
                         characterDao.insertAll(entities)
+                        saveCharactersToFile(body.results) // Save to file
                     }
                 } else {
                     Log.e(TAG, "Error fetching characters: ${response.errorBody()?.string()}")
@@ -44,6 +52,37 @@ class CharacterRepository(
             }
         }
     }
+
+    private fun saveCharactersToFile(characters: List<Character>) {
+        // Основной файл
+        val mainFile = File(context.getExternalFilesDir(null), fileName)
+        // Бэкап файл
+        val backupFile = File(context.filesDir, "characters_backup.txt")
+
+        // Сохранение в основной файл
+        mainFile.printWriter().use { out ->
+            characters.forEach { character ->
+                out.println(
+                    "Name: ${character.name}, Height: ${character.height}, " +
+                            "Mass: ${character.mass}, Birth Year: ${character.birth_year}, Gender: ${character.gender}"
+                )
+            }
+        }
+
+        // Сохранение в бэкап файл
+        backupFile.printWriter().use { out ->
+            characters.forEach { character ->
+                out.println(
+                    "Name: ${character.name}, Height: ${character.height}, " +
+                            "Mass: ${character.mass}, Birth Year: ${character.birth_year}, Gender: ${character.gender}"
+                )
+            }
+        }
+
+        Log.d(TAG, "Characters saved to file: ${mainFile.absolutePath}")
+        Log.d(TAG, "Backup saved to file: ${backupFile.absolutePath}")
+    }
+
 
     suspend fun isPageInDatabase(page: Int): Boolean {
         return withContext(Dispatchers.IO) {
