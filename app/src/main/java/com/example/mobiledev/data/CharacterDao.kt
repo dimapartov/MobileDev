@@ -20,4 +20,3 @@ interface CharacterDao {
     @Query("DELETE FROM characters")
     fun deleteAll()
 }
-

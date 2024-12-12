@@ -1,6 +1,5 @@
 package com.example.mobiledev.fragments
 
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -41,4 +40,3 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
         }
     }
 }
-
