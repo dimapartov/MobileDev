@@ -5,9 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [CharacterEntity::class], version = 1)
+@Database(entities = [CharacterEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun characterDao(): CharacterDao
 
     companion object {
@@ -20,10 +19,13 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "characters.db"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration() // Add this line
+                    .build()
                 INSTANCE = instance
                 instance
             }
         }
     }
 }
+

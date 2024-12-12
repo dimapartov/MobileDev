@@ -10,17 +10,18 @@ class CharacterRepository(
     private val apiService: ApiService,
     private val characterDao: CharacterDao
 ) {
-    fun getCharactersFromDb(): Flow<List<CharacterEntity>> {
-        return characterDao.getAllCharacters()
+    fun getCharactersFromDb(page: Int): Flow<List<CharacterEntity>> {
+        return characterDao.getCharactersByPage(page)
     }
 
-    suspend fun fetchCharactersFromApiAndSaveToDb() {
+    suspend fun fetchCharactersFromApiAndSaveToDb(page: Int) {
         withContext(Dispatchers.IO) {
-            val response = apiService.getCharacters(1)
+            val response = apiService.getCharacters(page)
             if (response.isSuccessful) {
                 response.body()?.results?.let { characters ->
                     val entities = characters.map { character ->
                         CharacterEntity(
+                            page = page,
                             name = character.name,
                             height = character.height,
                             mass = character.mass,
@@ -28,11 +29,15 @@ class CharacterRepository(
                             gender = character.gender
                         )
                     }
-                    characterDao.deleteAll()
                     characterDao.insertAll(entities)
                 }
             }
         }
     }
-}
 
+    suspend fun isPageInDatabase(page: Int): Boolean {
+        return withContext(Dispatchers.IO) {
+            characterDao.getCountByPage(page) > 0
+        }
+    }
+}

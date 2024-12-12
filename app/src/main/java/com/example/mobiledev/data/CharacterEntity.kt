@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "characters")
 data class CharacterEntity(
+    val page: Int,
     @PrimaryKey val name: String,
     val height: String,
     val mass: String,

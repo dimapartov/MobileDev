@@ -23,6 +23,9 @@ class CharactersFragment : Fragment() {
     private val binding get() = _binding ?: throw RuntimeException()
 
     private lateinit var repository: CharacterRepository
+    private val adapter = CharacterAdapter()
+
+    private var currentPage = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -36,36 +39,70 @@ class CharactersFragment : Fragment() {
 
         val dao = AppDatabase.getInstance(requireContext()).characterDao()
         val apiService = ApiServiceProvider.createApiService()
+
         repository = CharacterRepository(apiService, dao)
 
-        val adapter = CharacterAdapter()
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
 
         binding.refreshButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Characters loaded from API and saved to DB", Toast.LENGTH_LONG).show()
-            lifecycleScope.launch {
-                repository.fetchCharactersFromApiAndSaveToDb()
-            }
+            refreshPage(currentPage)
         }
 
         binding.settingsButton.setOnClickListener {
             findNavController().navigate(R.id.action_charactersFragment_to_settingsFragment)
         }
 
-        observeCharacters(adapter)
+        binding.previousButton.setOnClickListener {
+            if (currentPage > 1) {
+                currentPage--
+                loadCharactersForPage(currentPage)
+            }
+        }
+
+        binding.nextButton.setOnClickListener {
+            currentPage++
+            loadCharactersForPage(currentPage)
+        }
+
+        loadCharactersForPage(currentPage)
     }
 
-    private fun observeCharacters(adapter: CharacterAdapter) {
-        Toast.makeText(requireContext(), "Characters loaded from DB", Toast.LENGTH_LONG).show()
+
+    private fun refreshPage(currentPage: Int) {
         lifecycleScope.launch {
-            repository.getCharactersFromDb().collect { characters ->
-                adapter.submitList(characters.map {
-                    Character(it.name, it.height, it.mass, it.birth_year, it.gender)
-                })
+            repository.fetchCharactersFromApiAndSaveToDb(currentPage)
+            loadCharactersFromDb(currentPage)
+            Toast.makeText(requireContext(), "Data refreshed from API", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun loadCharactersForPage(page: Int) {
+        lifecycleScope.launch {
+            val dbHasData = repository.isPageInDatabase(page)
+            if (dbHasData) {
+                loadCharactersFromDb(page)
+                Toast.makeText(requireContext(), "Data from DB", Toast.LENGTH_SHORT).show()
+            } else {
+                repository.fetchCharactersFromApiAndSaveToDb(page)
+                loadCharactersFromDb(page)
+                Toast.makeText(requireContext(), "Data from api", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+    private fun loadCharactersFromDb(page: Int) {
+        lifecycleScope.launch {
+            repository.getCharactersFromDb(page).collect { characters ->
+                if (characters.isNotEmpty()) {
+                    adapter.submitList(characters.map {
+                        Character(it.name, it.height, it.mass, it.birth_year, it.gender)
+                    })
+                }
+            }
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
