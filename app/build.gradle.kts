@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     kotlin("plugin.serialization") version "2.0.21"
     id("androidx.navigation.safeargs.kotlin")
+    kotlin("kapt")
 }
 
 android {
@@ -19,6 +20,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        kapt {
+            arguments {
+                mapOf("room.schemaLocation" to "$projectDir/schemas")
+            }
         }
     }
 
@@ -54,6 +60,11 @@ android {
 }
 
 dependencies {
+    // Room
+    implementation("androidx.room:room-runtime:2.5.1")
+    implementation("androidx.room:room-ktx:2.5.1")
+    kapt("androidx.room:room-compiler:2.5.1")
+    annotationProcessor("androidx.room:room-compiler:2.5.1")
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -68,17 +79,16 @@ dependencies {
     // Fragment KTX
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
-    
     // OkHttp dependency
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     // Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
     // Retrofit Kotlin Serialization Converter
-    implementation ("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
     // JSON serialization library, works with the Kotlin serialization plugin
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     // RecyclerView
-    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
 
     val nav_version = "2.8.1"
     // Jetpack Compose integration

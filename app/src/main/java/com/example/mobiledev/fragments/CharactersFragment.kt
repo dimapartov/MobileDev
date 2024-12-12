@@ -13,17 +13,16 @@ import com.example.mobiledev.R
 import com.example.mobiledev.api.ApiServiceProvider
 import com.example.mobiledev.api.Character
 import com.example.mobiledev.api.CharacterRepository
+import com.example.mobiledev.data.AppDatabase
 import com.example.mobiledev.databinding.FragmentCharactersBinding
 import kotlinx.coroutines.launch
-import java.io.File
 
 class CharactersFragment : Fragment() {
 
     private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding ?: throw RuntimeException()
-    private val characterAdapter = CharacterAdapter()
-    private val repository = CharacterRepository(ApiServiceProvider.createApiService())
-    private var currentPage = 1
+
+    private lateinit var repository: CharacterRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -35,80 +34,36 @@ class CharactersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = characterAdapter
+        val dao = AppDatabase.getInstance(requireContext()).characterDao()
+        val apiService = ApiServiceProvider.createApiService()
+        repository = CharacterRepository(apiService, dao)
+
+        val adapter = CharacterAdapter()
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = adapter
+
+        binding.refreshButton.setOnClickListener {
+            Toast.makeText(requireContext(), "Characters loaded from API and saved to DB", Toast.LENGTH_LONG).show()
+            lifecycleScope.launch {
+                repository.fetchCharactersFromApiAndSaveToDb()
+            }
         }
 
-        binding.nextButton.setOnClickListener { fetchCharacters(currentPage + 1) }
-        binding.previousButton.setOnClickListener { fetchCharacters(currentPage - 1) }
         binding.settingsButton.setOnClickListener {
             findNavController().navigate(R.id.action_charactersFragment_to_settingsFragment)
         }
 
-        fetchCharacters(currentPage)
+        observeCharacters(adapter)
     }
 
-    private fun fetchCharacters(page: Int) {
+    private fun observeCharacters(adapter: CharacterAdapter) {
+        Toast.makeText(requireContext(), "Characters loaded from DB", Toast.LENGTH_LONG).show()
         lifecycleScope.launch {
-            binding.progressBar.visibility = View.VISIBLE
-            val result = repository.getCharacters(page)
-            binding.progressBar.visibility = View.GONE
-
-            result.onSuccess { response ->
-                characterAdapter.submitList(response.results)
-                currentPage = page
-                binding.nextButton.isEnabled = response.next != null
-                binding.previousButton.isEnabled = response.previous != null
-
-                // Сохраняем персонажей в файл после успешного получения
-                saveCharactersToFile(response.results)
-
-            }.onFailure { error ->
-                Toast.makeText(
-                    requireContext(),
-                    "Error: ${error.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+            repository.getCharactersFromDb().collect { characters ->
+                adapter.submitList(characters.map {
+                    Character(it.name, it.height, it.mass, it.birth_year, it.gender)
+                })
             }
-        }
-    }
-
-    private fun saveCharactersToFile(characters: List<Character>) {
-        try {
-            // Получаем директорию Downloads
-            val downloadDir = requireContext().getExternalFilesDir(null)
-            val file = File(downloadDir, "dmitriikubarev.txt")
-
-            // Создаем форматированную строку с информацией о персонажах
-            val content = characters.joinToString(separator = "\n") { character ->
-                "Name: ${character.name}\n" +
-                        "Height: ${character.height}\n" +
-                        "Mass: ${character.mass}\n" +
-                        "Birth Year: ${character.birth_year}\n" +
-                        "Gender: ${character.gender}\n" +
-                        "------------------------"
-            }
-
-            // Записываем в файл
-            file.writeText(content)
-
-            // Создаем резервную копию во внутреннем хранилище
-            val backupFile = File(requireContext().filesDir, "dmitriikubarev_backup.txt")
-            file.copyTo(backupFile, overwrite = true)
-
-            Toast.makeText(
-                requireContext(),
-                "Characters saved to file",
-                Toast.LENGTH_SHORT
-            ).show()
-
-        } catch (e: Exception) {
-            Toast.makeText(
-                requireContext(),
-                "Error saving file: ${e.message}",
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 
