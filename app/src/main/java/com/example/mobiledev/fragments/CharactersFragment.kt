@@ -52,7 +52,7 @@ class CharactersFragment : Fragment() {
 
         binding.settingsButton.setOnClickListener {
             findNavController().navigate(R.id.action_charactersFragment_to_settingsFragment)
-//            clearDb()
+            clearDb()
         }
 
         binding.previousButton.setOnClickListener {
